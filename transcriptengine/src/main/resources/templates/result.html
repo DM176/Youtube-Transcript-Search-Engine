@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Result Page</title>
+    <style>
+    /* Reset default margin and padding */
+    body,
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Apply a clean and professional font */
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      background-color: #f5f5f5;
+      color: #333;
+      margin: 0;
+    }
+
+    /* Style the header */
+    h1 {
+      text-align: left;
+      margin: 20px 0 10px;
+      font-size: 24px;
+      color: #1a0dab;
+    }
+
+    /* Style the search result container */
+    .search-result {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+    }
+
+    /* Style the row number */
+    .row-number {
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #70757a;
+    }
+
+    /* Style the links */
+    .link {
+      color: #1a0dab;
+      text-decoration: none;
+    }
+
+    .link:hover {
+      text-decoration: underline;
+    }
+
+    /* Style the list items */
+    .result-item {
+      margin-bottom: 5px;
+    }
+
+    /* Style thumbs up and thumbs down buttons */
+    .thumbs {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
+    }
+
+    .thumbs button {
+      cursor: pointer;
+      border: none;
+      background-color: transparent;
+      font-size: 20px;
+      margin-left: 5px;
+    }
+  </style>
+</head>
+<body>
+<h1>Search Result:</h1>
+
+<!-- Loop for each row -->
+<div th:each="row, rowNumber : ${response}" class="search-result">
+    <!-- Displaying the first two elements in each row as links -->
+    <ul>
+        <div class="result-item">
+            <a class="link" th:href="${row[1]}" th:text="${row[1]}"></a>
+        </div>
+
+        <!-- Displaying the remaining elements in the row -->
+        <th:block th:each="item, itemIdx : ${row}" th:if="${itemIdx.index > 1}">
+            <div class="result-item" th:text="${item}"></div>
+        </th:block>
+    </ul>
+
+    <!-- Thumbs up and thumbs down buttons -->
+    <div class="thumbs">
+        <button class="thumbs-up" onclick="thumbsUp()">👍</button>
+        <button class="thumbs-down" onclick="thumbsDown()">👎</button>
+    </div>
+</div>
+
+<!-- JavaScript functions for thumbs up and thumbs down actions -->
+<script>
+  function recordLinkClick(linkUrl) {
+    /* Get the user ID */;
+    // Implement a way to get the user ID
+    const userId = 123;
+
+    fetch('/record-click', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            userId: userId,
+            linkUrl: linkUrl,
+        }),
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log(`Click recorded for link: ${linkUrl}`);
+        } else {
+            console.error('Failed to record click.');
+        }
+    })
+    .catch(error => {
+        console.error('Error recording click:', error);
+    });
+  }
+
+ function thumbsUp() {
+    const linkElement = document.querySelector('.link'); // Select the link element
+    const linkUrl = linkElement.getAttribute('href'); // Get the link URL
+    recordLinkClick(linkUrl);
+    console.log('Thumbs up for the video!');
+  }
+
+  function thumbsDown() {
+    const linkElement = document.querySelector('.link'); // Select the link element
+    const linkUrl = linkElement.getAttribute('href'); // Get the link URL
+    recordLinkClick(linkUrl);
+    console.log('Thumbs Down for the video!');
+  }
+</script>
+
+</body>
+</html>

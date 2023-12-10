@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Video Search</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f5f5f5; /* Background color for the page */
+        font-family: Arial, sans-serif; /* Default font family */
+      }
+      .search-box {
+        text-align: center;
+      }
+      .search-input {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 300px; /* Adjust the width of the input as needed */
+        margin-right: 10px;
+        font-size: 16px;
+      }
+      .search-button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff; /* Button background color */
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease; /* Smooth transition on hover */
+      }
+      .search-button:hover {
+        background-color: #0056b3; /* Button color on hover */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="search-container">
+      <div class="search-box">
+        <form action="/search" method="POST">
+          <input
+            type="text"
+            name="query"
+            class="search-input"
+            placeholder="Search Video..."
+          />
+          <input type="submit" value="Search" class="search-button" />
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
