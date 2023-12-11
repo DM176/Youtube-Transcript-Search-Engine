@@ -1,27 +1,54 @@
 package com.example.transcriptengine.transcriptengine.dto;
 
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
+@Entity
 public class ClickRequest {
 
-    private Long id; // Use Long instead of int for ID to match H2's handling of auto-generated IDs
+    @Id
+    private int id; // Use Long instead of int for ID to match H2's handling of auto-generated IDs
 
     private String userId;
 
     private String linkUrl;
 
+    private int thumbsUpCount;
+    private int thumbsDownCount;
+    private int numberOfClicks;
+
+    public ClickRequest() {
+        this.userId = null;
+        this.linkUrl = null;
+        thumbsUpCount = 0;
+        thumbsDownCount = 0;
+        numberOfClicks = 0;
+    }
     // Constructor with all fields except id as it will be auto-generated
-    public ClickRequest(String userId, String linkUrl) {
+    public ClickRequest(String userId, String linkUrl, int thumbsUp, int thumbsDown, int numberOfClicks) {
         this.userId = userId;
         this.linkUrl = linkUrl;
+        this.thumbsUpCount = thumbsUp;
+        this.thumbsDownCount = thumbsDown;
+        this.numberOfClicks = numberOfClicks;
+    }
+    public void increaseClick(){
+        this.numberOfClicks++;
+    }
+    public void increaseThumbsUp(){
+        this.thumbsUpCount++;
+    }
+    public void increaseThumbDown(){
+        this.thumbsDownCount++;
     }
 
     // Getter and Setter for id
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

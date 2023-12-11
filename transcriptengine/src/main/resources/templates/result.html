@@ -84,7 +84,7 @@
     <!-- Displaying the first two elements in each row as links -->
     <ul>
         <div class="result-item">
-            <a class="link" th:href="${row[1]}" th:text="${row[1]}"></a>
+            <a onclick="recordLinkClick()" class="link" th:href="${row[1]}" th:text="${row[1]}"></a>
         </div>
 
         <!-- Displaying the remaining elements in the row -->
@@ -102,7 +102,10 @@
 
 <!-- JavaScript functions for thumbs up and thumbs down actions -->
 <script>
-  function recordLinkClick(linkUrl) {
+  function recordLinkClick() {
+
+    const linkElement = document.querySelector('.link'); // Select the link element
+    const linkUrl = linkElement.getAttribute('href'); // Get the link URL
     /* Get the user ID */;
     // Implement a way to get the user ID
     const userId = 123;
@@ -130,17 +133,63 @@
   }
 
  function thumbsUp() {
-    const linkElement = document.querySelector('.link'); // Select the link element
-    const linkUrl = linkElement.getAttribute('href'); // Get the link URL
-    recordLinkClick(linkUrl);
+    const thumbsUplinkElement = document.querySelector('.link'); // Select the link element
+    const thumbsUpUrl = thumbsUplinkElement.getAttribute('href'); // Get the link URL
     console.log('Thumbs up for the video!');
+    /* Get the user ID */;
+    // Implement a way to get the user ID
+    const userId = 123;
+
+    fetch('/record-thumbsUp', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            userId: userId,
+            linkUrl: thumbsUpUrl,
+        }),
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log(`Click recorded for link: ${thumbsUpUrl}`);
+        } else {
+            console.error('Failed to record click.');
+        }
+    })
+    .catch(error => {
+        console.error('Error recording click:', error);
+    });
   }
 
   function thumbsDown() {
-    const linkElement = document.querySelector('.link'); // Select the link element
-    const linkUrl = linkElement.getAttribute('href'); // Get the link URL
-    recordLinkClick(linkUrl);
+    const thumbsDownlinkElement = document.querySelector('.link'); // Select the link element
+    const thumbsDownUrl = thumbsDownlinkElement.getAttribute('href'); // Get the link URL
     console.log('Thumbs Down for the video!');
+    /* Get the user ID */;
+    // Implement a way to get the user ID
+    const userId = 123;
+
+    fetch('/record-thumbsDown', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            userId: userId,
+            linkUrl: thumbsDownUrl,
+        }),
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log(`Click recorded for link: ${thumbsDownUrl}`);
+        } else {
+            console.error('Failed to record click.');
+        }
+    })
+    .catch(error => {
+        console.error('Error recording click:', error);
+    });
   }
 </script>
 

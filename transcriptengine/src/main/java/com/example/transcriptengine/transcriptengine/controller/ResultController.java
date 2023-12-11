@@ -23,4 +23,15 @@ public class ResultController {
         linkClickService.recordLinkClick(clickRequest.getUserId(), clickRequest.getLinkUrl());
         return ResponseEntity.ok("Click recorded successfully");
     }
+
+    @PostMapping("/record-thumbsUp")
+    public ResponseEntity<String> recordThumbsUp(@RequestBody ClickRequest clickRequest) {
+        linkClickService.recordThumbsUp(clickRequest.getUserId(), clickRequest.getLinkUrl());
+        return ResponseEntity.ok("Thumbs Up recorded successfully");
+    }
+    @PostMapping("/record-thumbsDown")
+    public ResponseEntity<String> recordThumbsDown(@RequestBody ClickRequest clickRequest) {
+        linkClickService.recordThumbsDown(clickRequest.getUserId(), clickRequest.getLinkUrl());
+        return ResponseEntity.ok("Thumbs Down recorded successfully");
+    }
 }
