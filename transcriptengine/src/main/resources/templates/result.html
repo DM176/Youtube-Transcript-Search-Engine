@@ -84,7 +84,7 @@
     <!-- Displaying the first two elements in each row as links -->
     <ul>
         <div class="result-item">
-            <a onclick="recordLinkClick()" class="link" th:href="${row[1]}" th:text="${row[1]}"></a>
+            <a onclick="recordLinkClick(event)" class="link" th:href="${row[1]}" th:text="${row[1]}"></a>
         </div>
 
         <!-- Displaying the remaining elements in the row -->
@@ -95,17 +95,17 @@
 
     <!-- Thumbs up and thumbs down buttons -->
     <div class="thumbs">
-        <button class="thumbs-up" onclick="thumbsUp()">👍</button>
-        <button class="thumbs-down" onclick="thumbsDown()">👎</button>
+        <button class="thumbs-up" onclick="thumbsUp(event)">👍</button>
+        <button class="thumbs-down" onclick="thumbsDown(event)">👎</button>
     </div>
 </div>
 
 <!-- JavaScript functions for thumbs up and thumbs down actions -->
 <script>
-  function recordLinkClick() {
-
-    const linkElement = document.querySelector('.link'); // Select the link element
-    const linkUrl = linkElement.getAttribute('href'); // Get the link URL
+ function recordLinkClick(event) {
+     var linkElement = event.currentTarget;
+    var linkUrl = linkElement.getAttribute('href');
+    console.log('Link clicked:', linkUrl);
     /* Get the user ID */;
     // Implement a way to get the user ID
     const userId = 123;
@@ -130,12 +130,12 @@
     .catch(error => {
         console.error('Error recording click:', error);
     });
-  }
+}
 
- function thumbsUp() {
-    const thumbsUplinkElement = document.querySelector('.link'); // Select the link element
-    const thumbsUpUrl = thumbsUplinkElement.getAttribute('href'); // Get the link URL
-    console.log('Thumbs up for the video!');
+function thumbsUp(event) {
+    const thumbsUpLinkElement = event.currentTarget;
+    const thumbsUpUrl = thumbsUpLinkElement.closest('.search-result').querySelector('.link').getAttribute('href');
+    console.log('Thumbs up for the link:', thumbsUpUrl);
     /* Get the user ID */;
     // Implement a way to get the user ID
     const userId = 123;
@@ -152,20 +152,20 @@
     })
     .then(response => {
         if (response.ok) {
-            console.log(`Click recorded for link: ${thumbsUpUrl}`);
+            console.log(`Thumbs up recorded for link: ${thumbsUpUrl}`);
         } else {
-            console.error('Failed to record click.');
+            console.error('Failed to record thumbs up.');
         }
     })
     .catch(error => {
-        console.error('Error recording click:', error);
+        console.error('Error recording thumbs up:', error);
     });
-  }
+}
 
-  function thumbsDown() {
-    const thumbsDownlinkElement = document.querySelector('.link'); // Select the link element
-    const thumbsDownUrl = thumbsDownlinkElement.getAttribute('href'); // Get the link URL
-    console.log('Thumbs Down for the video!');
+function thumbsDown(event) {
+   const thumbsDownLinkElement = event.currentTarget;
+    const thumbsDownUrl = thumbsDownLinkElement.closest('.search-result').querySelector('.link').getAttribute('href');
+    console.log('Thumbs down for the link:', thumbsDownUrl);
     /* Get the user ID */;
     // Implement a way to get the user ID
     const userId = 123;
@@ -182,15 +182,16 @@
     })
     .then(response => {
         if (response.ok) {
-            console.log(`Click recorded for link: ${thumbsDownUrl}`);
+            console.log(`Thumbs down recorded for link: ${thumbsDownUrl}`);
         } else {
-            console.error('Failed to record click.');
+            console.error('Failed to record thumbs down.');
         }
     })
     .catch(error => {
-        console.error('Error recording click:', error);
+        console.error('Error recording thumbs down:', error);
     });
-  }
+}
+
 </script>
 
 </body>

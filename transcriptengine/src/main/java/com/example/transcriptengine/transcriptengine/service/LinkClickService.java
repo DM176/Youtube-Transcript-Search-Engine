@@ -25,6 +25,8 @@ public class LinkClickService {
             linkClickRepository.save(clickRequest);
         } else {
             clickRequest = linkClickRepository.findByLinkUrl(linkUrl).get(0);
+            clickRequest.increaseClick();;
+            linkClickRepository.save(clickRequest);
         }
 
     }
