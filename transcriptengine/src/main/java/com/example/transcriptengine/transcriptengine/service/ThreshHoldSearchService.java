@@ -1,5 +1,6 @@
 package com.example.transcriptengine.transcriptengine.service;
 
+import com.example.transcriptengine.transcriptengine.dto.ClickRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +13,9 @@ public class ThreshHoldSearchService implements SearchAlgoInterface{
     DataService dataService;
 
     @Override
-    public List<List<String>> searchVideo(String query) {
-        Map<Integer, List<String>> data = null;
-        List<List<String>> resultRows = new ArrayList<>();
+    public List<ClickRequest> searchVideo(String query) {
+        Map<Integer, ClickRequest> data = null;
+        List<ClickRequest> resultRows = new ArrayList<>();
         Set<String > uniqueURLs = new HashSet<>(); // Store unique URLs
 
         try {
@@ -23,14 +24,14 @@ public class ThreshHoldSearchService implements SearchAlgoInterface{
             // Handle the exception appropriately
         }
 
-        for (Map.Entry<Integer, List<String>> entry : data.entrySet()) {
-            List<String> rowData = entry.getValue();
-            String largeText = rowData.get(2);
+        for (Map.Entry<Integer, ClickRequest> entry : data.entrySet()) {
+            ClickRequest rowData = entry.getValue();
+            String largeText = rowData.getTranscriptData();
 
             String result = findMatchesInLargeText(largeText, query, 0);
 
             if (result != null) {
-                String url = rowData.get(0); // Assuming URL is in the first index of the row
+                String url = rowData.getLinkUrl(); // Assuming URL is in the first index of the row
                 if (!uniqueURLs.contains(url)) {
                     resultRows.add(rowData);
                     uniqueURLs.add(url);

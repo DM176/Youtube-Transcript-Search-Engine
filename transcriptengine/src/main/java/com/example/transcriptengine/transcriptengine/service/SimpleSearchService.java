@@ -1,5 +1,6 @@
 package com.example.transcriptengine.transcriptengine.service;
 
+import com.example.transcriptengine.transcriptengine.dto.ClickRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +14,9 @@ public class SimpleSearchService implements SearchAlgoInterface{
     DataService dataService;
 
     @Override
-    public List<List<String>> searchVideo(String query) { //nucleus
-        Map<Integer, List<String>> data = null;
-        List<List<String>> resultRows = new ArrayList<>();
+    public List<ClickRequest> searchVideo(String query) { //nucleus
+        Map<Integer, ClickRequest> data = null;
+        List<ClickRequest> resultRows = new ArrayList<>();
         Set<String > uniqueURLs = new HashSet<>(); // Store unique URLs
         Boolean found = false;
 
@@ -24,13 +25,13 @@ public class SimpleSearchService implements SearchAlgoInterface{
         } catch (IOException ioException) {
             // Handle the exception appropriately
         }
-        for (Map.Entry<Integer, List<String>> entry : data.entrySet()) {
-            List<String> rowData = entry.getValue();  //col1: youtube url, col2: youtube url with timestamp, col2:transcript
-            String largeText = rowData.get(2);
+        for (Map.Entry<Integer, ClickRequest> entry : data.entrySet()) {
+            ClickRequest rowData = entry.getValue();  //col1: youtube url, col2: youtube url with timestamp, col2:transcript
+            String largeText = rowData.getTranscriptData();
             found = largeText.contains(query);
 
             if (found) {
-                String url = rowData.get(0); // Assuming URL is in the first index of the row
+                String url = rowData.getLinkUrl(); // Assuming URL is in the first index of the row
                 if (!uniqueURLs.contains(url)) {
                     resultRows.add(rowData);
                     uniqueURLs.add(url);

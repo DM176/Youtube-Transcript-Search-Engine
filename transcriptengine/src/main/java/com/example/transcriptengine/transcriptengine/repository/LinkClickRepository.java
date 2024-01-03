@@ -6,8 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface LinkClickRepository extends JpaRepository<ClickRequest, Integer> {
-
-    List<ClickRequest> findByLinkUrl(String linkUrl);
+public interface LinkClickRepository {
+//        extends JpaRepository<ClickRequest, Integer> {
+//
+//    List<ClickRequest> findByLinkUrl(String linkUrl);
 
 }

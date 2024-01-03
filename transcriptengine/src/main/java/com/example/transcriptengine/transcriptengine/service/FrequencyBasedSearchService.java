@@ -1,5 +1,6 @@
 package com.example.transcriptengine.transcriptengine.service;
 
+import com.example.transcriptengine.transcriptengine.dto.ClickRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +18,11 @@ public class FrequencyBasedSearchService implements SearchAlgoInterface {
 
 
     @Override
-    public List<List<String>> searchVideo(String query) {
-        Map<Integer, List<String>> urlData = null;
+    public List<ClickRequest> searchVideo(String query) {
+        Map<Integer, ClickRequest> urlData = null;
         Map<String, Integer> urlCount = new HashMap<>(); // Track URL counts
 
-        List<List<String>> resultRows = new ArrayList<>();
+        List<ClickRequest> resultRows = new ArrayList<>();
         try {
             urlData = dataService.readFromFile();
         } catch (IOException ioException) {
@@ -29,14 +30,14 @@ public class FrequencyBasedSearchService implements SearchAlgoInterface {
             return resultRows;
         }
 
-        for (Map.Entry<Integer, List<String>> entry : urlData.entrySet()) {
-            List<String> rowData = entry.getValue();
-            String largeText = rowData.get(2);
+        for (Map.Entry<Integer, ClickRequest> entry : urlData.entrySet()) {
+            ClickRequest rowData = entry.getValue();
+            String largeText = rowData.getTranscriptData();
 
             Boolean result = largeText.contains(query);
 
             if (result==true) {
-                String url = rowData.get(0); // URL is in the first index of the row
+                String url = rowData.getLinkUrl(); // URL is in the first index of the row
                 if (!urlCount.containsKey(url)) {
                     resultRows.add(rowData);
                 }
@@ -49,8 +50,8 @@ public class FrequencyBasedSearchService implements SearchAlgoInterface {
 
         // Sort resultRows based on the counts of URLs using the urlCount map
             resultRows.sort((row1, row2) -> {
-            String url1 = row1.get(0); // Assuming URL is in the first index of the row
-            String url2 = row2.get(0);
+            String url1 = row1.getLinkUrl(); // Assuming URL is in the first index of the row
+            String url2 = row2.getLinkUrl();
 
             return Integer.compare(urlCount.getOrDefault(url2, 0), urlCount.getOrDefault(url1, 0));
         });

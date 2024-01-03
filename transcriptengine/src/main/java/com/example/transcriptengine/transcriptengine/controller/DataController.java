@@ -1,5 +1,6 @@
 package com.example.transcriptengine.transcriptengine.controller;
 
+import com.example.transcriptengine.transcriptengine.dto.ClickRequest;
 import com.example.transcriptengine.transcriptengine.service.DataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +16,7 @@ public class DataController {
     DataService dataService;
 
     @RequestMapping(value = "/readData")
-    public Map<Integer, List<String>> getTranscriptData() throws IOException {
+    public Map<Integer, ClickRequest> getTranscriptData() throws IOException {
        return dataService.readFromFile();
     }
 }

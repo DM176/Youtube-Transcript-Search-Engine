@@ -1,5 +1,6 @@
 package com.example.transcriptengine.transcriptengine.controller;
 
+import com.example.transcriptengine.transcriptengine.dto.ClickRequest;
 import com.example.transcriptengine.transcriptengine.service.FrequencyBasedSearchService;
 import com.example.transcriptengine.transcriptengine.service.SimpleSearchService;
 import com.example.transcriptengine.transcriptengine.service.ThreshHoldSearchService;
@@ -30,11 +31,11 @@ public class SearchController {
 
     @PostMapping("/search")
     public String performSearch(Model model, @RequestParam String query) {
-        List<List<String>> simpleSearchServiceResponse = simpleSearchService.searchVideo(query);
-        List<List<String>> threshHoldSearchServiceResponse = threshHoldSearchService.searchVideo(query);
-        List<List<String>> frequencyBasedSearchServiceResponse = frequencyBasedSearchService.searchVideo(query);
+        List<ClickRequest> simpleSearchServiceResponse = simpleSearchService.searchVideo(query);
+        List<ClickRequest> threshHoldSearchServiceResponse = threshHoldSearchService.searchVideo(query);
+        List<ClickRequest> frequencyBasedSearchServiceResponse = frequencyBasedSearchService.searchVideo(query);
 
-        List<List<String>> combinedResponse = new ArrayList<>();
+        List<ClickRequest> combinedResponse = new ArrayList<>();
 
         int maxSize = Math.max(Math.max(simpleSearchServiceResponse.size(), threshHoldSearchServiceResponse.size()), frequencyBasedSearchServiceResponse.size());
         for (int i = 0; i < maxSize; i++) {
