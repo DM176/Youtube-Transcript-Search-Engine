@@ -1,198 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8" />
-    <title>Result Page</title>
-    <style>
-    /* Reset default margin and padding */
-    body,
-    ul {
-      margin: 0;
-      padding: 0;
-    }
-
-    /* Apply a clean and professional font */
-    body {
-      font-family: 'Arial', sans-serif;
-      line-height: 1.6;
-      background-color: #f5f5f5;
-      color: #333;
-      margin: 0;
-    }
-
-    /* Style the header */
-    h1 {
-      text-align: left;
-      margin: 20px 0 10px;
-      font-size: 24px;
-      color: #1a0dab;
-    }
-
-    /* Style the search result container */
-    .search-result {
-      border: 1px solid #ccc;
-      padding: 15px;
-      margin-bottom: 20px;
-      border-radius: 6px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      background-color: #fff;
-    }
-
-    /* Style the row number */
-    .row-number {
-      font-weight: bold;
-      margin-bottom: 5px;
-      color: #70757a;
-    }
-
-    /* Style the links */
-    .link {
-      color: #1a0dab;
-      text-decoration: none;
-    }
-
-    .link:hover {
-      text-decoration: underline;
-    }
-
-    /* Style the list items */
-    .result-item {
-      margin-bottom: 5px;
-    }
-
-    /* Style thumbs up and thumbs down buttons */
-    .thumbs {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 10px;
-    }
-
-    .thumbs button {
-      cursor: pointer;
-      border: none;
-      background-color: transparent;
-      font-size: 20px;
-      margin-left: 5px;
-    }
-  </style>
+    <title>Search Results</title>
 </head>
 <body>
-<h1>Search Result:</h1>
-
-<!-- Loop for each row -->
-<div th:each="row, rowNumber : ${response}" class="search-result">
-    <!-- Displaying the first two elements in each row as links -->
-    <ul>
-        <div class="result-item">
-            <a onclick="recordLinkClick(event)" class="link" th:href="${row[1]}" th:text="${row[1]}"></a>
-        </div>
-
-        <!-- Displaying the remaining elements in the row -->
-        <th:block th:each="item, itemIdx : ${row}" th:if="${itemIdx.index > 1}">
-            <div class="result-item" th:text="${item}"></div>
-        </th:block>
-    </ul>
-
-    <!-- Thumbs up and thumbs down buttons -->
-    <div class="thumbs">
-        <button class="thumbs-up" onclick="thumbsUp(event)">👍</button>
-        <button class="thumbs-down" onclick="thumbsDown(event)">👎</button>
-    </div>
+<h1>Search Results</h1>
+<div th:if="${response}">
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Link URL</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="clickRequest : ${response}">
+            <td class="link" onclick="recordLinkClick(event)">
+                <a th:href="${clickRequest.linkUrl}" th:text="${clickRequest.linkUrl}">Link</a>
+            </td>
+            <td>
+                <div class="thumbs">
+                    <button class="thumbs-up" onclick="thumbsUp(event)">👍</button>
+                </div>
+            </td>
+            <td>
+                <div class="thumbs">
+                    <button class="thumbs-down" onclick="thumbsDown(event)">👎</button>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:unless="${response}">
+    <p>No results found.</p>
 </div>
 
 <!-- JavaScript functions for thumbs up and thumbs down actions -->
 <script>
- function recordLinkClick(event) {
-     var linkElement = event.currentTarget;
-    var linkUrl = linkElement.getAttribute('href');
-    console.log('Link clicked:', linkUrl);
-    /* Get the user ID */;
-    // Implement a way to get the user ID
-    const userId = 123;
+    function recordLinkClick(event) {
+        var linkElement = event.currentTarget;
+        var linkUrl = linkElement.closest('tr').querySelector('.link').innerText.trim();
+        console.log('Link clicked:', linkUrl);
+        /* Get the user ID */;
+        // Implement a way to get the user ID
+        const userId = 123;
 
-    fetch('/record-click', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            userId: userId,
-            linkUrl: linkUrl,
-        }),
-    })
-    .then(response => {
-        if (response.ok) {
-            console.log(`Click recorded for link: ${linkUrl}`);
-        } else {
-            console.error('Failed to record click.');
-        }
-    })
-    .catch(error => {
-        console.error('Error recording click:', error);
-    });
-}
+        fetch('/record-click', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId: userId,
+                linkUrl: linkUrl,
+            }),
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log(`Click recorded for link: ${linkUrl}`);
+            } else {
+                console.error('Failed to record click.');
+            }
+        })
+        .catch(error => {
+            console.error('Error recording click:', error);
+        });
+    }
 
-function thumbsUp(event) {
-    const thumbsUpLinkElement = event.currentTarget;
-    const thumbsUpUrl = thumbsUpLinkElement.closest('.search-result').querySelector('.link').getAttribute('href');
-    console.log('Thumbs up for the link:', thumbsUpUrl);
-    /* Get the user ID */;
-    // Implement a way to get the user ID
-    const userId = 123;
+    function thumbsUp(event) {
+        const thumbsUpLinkElement = event.currentTarget;
+        const thumbsUpUrl = thumbsUpLinkElement.closest('tr').querySelector('.link').innerText.trim();
+        console.log('Thumbs up for the link:', thumbsUpUrl);
+        /* Get the user ID */;
+        // Implement a way to get the user ID
+        const userId = 123;
 
-    fetch('/record-thumbsUp', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            userId: userId,
-            linkUrl: thumbsUpUrl,
-        }),
-    })
-    .then(response => {
-        if (response.ok) {
-            console.log(`Thumbs up recorded for link: ${thumbsUpUrl}`);
-        } else {
-            console.error('Failed to record thumbs up.');
-        }
-    })
-    .catch(error => {
-        console.error('Error recording thumbs up:', error);
-    });
-}
+        fetch('/record-thumbsUp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId: userId,
+                linkUrl: thumbsUpUrl,
+            }),
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log(`Thumbs up recorded for link: ${thumbsUpUrl}`);
+            } else {
+                console.error('Failed to record thumbs up.');
+            }
+        })
+        .catch(error => {
+            console.error('Error recording thumbs up:', error);
+        });
+    }
 
-function thumbsDown(event) {
-   const thumbsDownLinkElement = event.currentTarget;
-    const thumbsDownUrl = thumbsDownLinkElement.closest('.search-result').querySelector('.link').getAttribute('href');
-    console.log('Thumbs down for the link:', thumbsDownUrl);
-    /* Get the user ID */;
-    // Implement a way to get the user ID
-    const userId = 123;
+    function thumbsDown(event) {
+        const thumbsDownLinkElement = event.currentTarget;
+        const thumbsDownUrl = thumbsDownLinkElement.closest('tr').querySelector('.link').innerText.trim();
+        console.log('Thumbs down for the link:', thumbsDownUrl);
+        /* Get the user ID */;
+        // Implement a way to get the user ID
+        const userId = 123;
 
-    fetch('/record-thumbsDown', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            userId: userId,
-            linkUrl: thumbsDownUrl,
-        }),
-    })
-    .then(response => {
-        if (response.ok) {
-            console.log(`Thumbs down recorded for link: ${thumbsDownUrl}`);
-        } else {
-            console.error('Failed to record thumbs down.');
-        }
-    })
-    .catch(error => {
-        console.error('Error recording thumbs down:', error);
-    });
-}
-
+        fetch('/record-thumbsDown', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId: userId,
+                linkUrl: thumbsDownUrl,
+            }),
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log(`Thumbs down recorded for link: ${thumbsDownUrl}`);
+            } else {
+                console.error('Failed to record thumbs down.');
+            }
+        })
+        .catch(error => {
+            console.error('Error recording thumbs down:', error);
+        });
+    }
 </script>
-
 </body>
 </html>
